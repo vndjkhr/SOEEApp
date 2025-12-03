@@ -1,0 +1,18 @@
+﻿@model SOEEApp.Models.ServiceCostSlab
+
+<h2>Create Slab</h2>
+
+@using (Html.BeginForm())
+{
+    <div class="form-group">
+        @Html.LabelFor(m => m.MinAmount)
+        @Html.TextBoxFor(m => m.MinAmount, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.MaxAmount)
+        @Html.TextBoxFor(m => m.MaxAmount, new { @class = "form-control" })
+    </div>
+
+    <input type="submit" value="Create" class="btn btn-primary" />
+}

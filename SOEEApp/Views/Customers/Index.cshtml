@@ -1,0 +1,25 @@
+﻿@model IEnumerable<SOEEApp.Models.Customer>
+
+<h2>Customers</h2>
+
+<p>
+    @Html.ActionLink("Add New Customer", "Create")
+</p>
+
+<table class="table table-bordered table-striped">
+    <tr>
+        <th>@Html.DisplayNameFor(m => m.CustomerName)</th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.CustomerName</td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.CustomerID }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.CustomerID })
+            </td>
+        </tr>
+    }
+</table>

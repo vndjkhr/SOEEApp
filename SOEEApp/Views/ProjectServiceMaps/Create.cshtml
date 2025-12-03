@@ -1,0 +1,25 @@
+﻿@model SOEEApp.Models.ProjectServiceMap
+@{
+    ViewBag.Title = "Create Project-Service Mapping";
+}
+
+<h2>Create Project-Service Mapping</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="form-group">
+        @Html.LabelFor(m => m.ProjectID)
+        @Html.DropDownListFor(m => m.ProjectID, (SelectList)ViewBag.Projects, "Select Project", new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.ServiceTypeID)
+        @Html.DropDownListFor(m => m.ServiceTypeID, (SelectList)ViewBag.ServiceTypes, "Select Service", new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.AddedOn)
+        @Html.TextBoxFor(m => m.AddedOn, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+    </div>
+    <button type="submit" class="btn btn-success">Save</button>
+    @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-default" })
+}

@@ -1,0 +1,29 @@
+﻿@model IEnumerable<SOEEApp.Models.ServiceType>
+
+<h2>Service Types</h2>
+
+<p>
+    <a href="@Url.Action("Create")" class="btn btn-primary">Add Service Type</a>
+</p>
+
+<table class="table table-bordered table-striped">
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Created</th>
+        <th>Actions</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.ServiceTypeID</td>
+            <td>@item.ServiceName</td>
+            <td>@item.CreatedDate.ToShortDateString()</td>
+            <td>
+                <a class="btn btn-sm btn-info" href="@Url.Action("Edit", new { id = item.ServiceTypeID })">Edit</a>
+                <a class="btn btn-sm btn-danger" href="@Url.Action("Delete", new { id = item.ServiceTypeID })">Delete</a>
+            </td>
+        </tr>
+    }
+</table>

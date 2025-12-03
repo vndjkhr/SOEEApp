@@ -1,0 +1,24 @@
+﻿@model IEnumerable<SOEEApp.Models.ServiceTypeSlabMap>
+
+<h2>Service Type → Slab → Percentage</h2>
+
+<p>
+    @Html.ActionLink("Create New Mapping", "Create")
+</p>
+
+<table class="table">
+    <tr>
+        <th>Service Type</th>
+        <th>Slab Range</th>
+        <th>Percentage</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.ServiceType.ServiceName</td>
+            <td>@item.Slab.MinAmount - @item.Slab.MaxAmount</td>
+            <td>@item.Percentage %</td>
+        </tr>
+    }
+</table>

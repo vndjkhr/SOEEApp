@@ -1,0 +1,16 @@
+﻿@model SOEEApp.Models.ServiceType
+<h2>Edit Service Type</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    @Html.HiddenFor(m => m.ServiceTypeID)
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.ServiceName)
+        @Html.TextBoxFor(m => m.ServiceName, new { @class = "form-control" })
+    </div>
+
+    <button type="submit" class="btn btn-success">Update</button>
+}

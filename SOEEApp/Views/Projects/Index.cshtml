@@ -1,0 +1,30 @@
+﻿@model IEnumerable<SOEEApp.Models.Project>
+
+<h2>Projects</h2>
+
+<a class="btn btn-primary" href="@Url.Action("Create")">Add Project</a>
+<br /><br />
+
+<table class="table table-bordered">
+    <tr>
+        <th>Name</th>
+        <th>Customer</th>
+        <th>OIC</th>
+        <th>Status</th>
+        <th>Actions</th>
+    </tr>
+
+    @foreach (var p in Model)
+    {
+        <tr>
+            <td>@p.Name</td>
+            <td>@(p.OICUser != null ? p.OICUser.Name ?? p.OICUser.UserName : "")</td>
+            <td>@p.Status</td>
+            <td>
+                <a class="btn btn-info btn-sm" href="@Url.Action("Edit", new { id = p.ProjectID })">Edit</a>
+                <a class="btn btn-danger btn-sm" href="@Url.Action("Delete", new { id = p.ProjectID })">Delete</a>
+                <a class="btn btn-secondary btn-sm" href="@Url.Action("ManageServices", "ProjectServiceMapS", new { projectId = p.ProjectID })">Services</a>
+            </td>
+        </tr>
+    }
+</table>

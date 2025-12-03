@@ -1,0 +1,14 @@
+﻿@model SOEEApp.Models.ServiceType
+<h2>Add Service Type</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.ServiceName)
+        @Html.TextBoxFor(m => m.ServiceName, new { @class = "form-control" })
+    </div>
+
+    <button type="submit" class="btn btn-success">Save</button>
+}

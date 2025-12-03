@@ -1,0 +1,38 @@
+﻿@model IEnumerable<SOEEApp.Models.SOEE>
+
+
+@{
+    ViewBag.Title = "SOEE List";
+}
+
+<h2>SOEE List</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>SOEE ID</th>
+            <th>Project</th>
+            <th>Customer</th>
+            <th>SOEE Date</th>
+            <th>Total</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.SOEEID</td>
+                <td>@item.Project.Name</td>
+                <td>@item.Customer.CustomerName</td>
+                <td>@item.SOEERaiseDate.ToShortDateString()</td>
+                <td>@item.GrandTotal.ToString("0.00")</td>
+                <td>
+                    @Html.ActionLink("View", "Details", new { id = item.SOEEID })
+                    @Html.ActionLink("Edit", "Edit", new { id = item.SOEEID }, new { @class = "btn btn-primary btn-sm" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

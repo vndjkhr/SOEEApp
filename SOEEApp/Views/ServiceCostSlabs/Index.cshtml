@@ -1,0 +1,22 @@
+﻿@model IEnumerable<SOEEApp.Models.ServiceCostSlab>
+
+<h2>Slab List</h2>
+
+<p>
+    @Html.ActionLink("Create New Slab", "Create")
+</p>
+
+<table class="table">
+    <tr>
+        <th>Amount From</th>
+        <th>Amount To</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.MinAmount</td>
+            <td>@item.MaxAmount</td>
+        </tr>
+    }
+</table>
