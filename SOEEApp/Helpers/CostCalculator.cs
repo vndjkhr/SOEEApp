@@ -16,51 +16,39 @@ namespace SOEEApp.Helpers
             => (taxable * percent) / 100;
 
         public static ComputedTotals ComputeTotalsForItems(
-            IEnumerable<SOEEItem> items,
-            ApplicationDbContext db,
-            int projectId,
-            int soeeId)
+    IEnumerable<SOEEItem> items,
+    ApplicationDbContext db,
+    int projectId,
+    int soeeId)
         {
             var result = new ComputedTotals();
 
-            // work on the active items list
+            // work on active items only
             var activeItems = items.Where(x => !x.IsDeleted).ToList();
             if (!activeItems.Any()) return result;
 
-            // BASIC so far (based on items' current unit/qty/unitprice)
-            result.Basic = activeItems.Sum(i => i.Quantity * i.Unit * i.UnitPrice);
-
-            // Previous Sums (excluding current SOEE)
-            decimal previousTotal =
-                db.SOEEs.Where(x => x.ProjectID == projectId && x.SOEEID != soeeId)
-                        .Sum(x => (decimal?)x.GrandTotal) ?? 0;
+            // Previous SOEE totals ignored for now
+            decimal previousTotal = 0m;
 
             // We'll use a runningBasic to compute slab thresholds progressively.
             decimal runningBasic = 0m;
-
-            // Start with previous cumulative
             decimal cumulativeBeforeItems = previousTotal;
 
-            // For each item, determine whether to use stored percent or compute a new percent.
-            // We'll compute slab percent based on cumulativeAfter = cumulativeBeforeItems + runningBasic + subTotal
             foreach (var item in activeItems)
             {
                 // compute subTotal and persist it
                 decimal subTotal = item.Unit * item.Quantity * item.UnitPrice;
-                item.SubTotal = subTotal;
+                item.SubTotal = decimal.Round(subTotal, 2);
 
-                // Determine if we must recalc percentage:
-                // - If item.ServiceChargePercent is zero or negative => must recalc (new item / flagged)
-                // - If unit/qty/price changed (handled by caller by setting percent=0) => recalc
+                // determine if we need to recalc percentage (0 means new or changed item)
                 bool mustRecalc = item.ServiceChargePercent <= 0m;
 
                 if (mustRecalc)
                 {
-                    // Determine cumulative value to use for slab selection.
-                    // Use cumulativeAfter = cumulativeBeforeItems + runningBasic + subTotal
+                    // cumulativeAfter = running total for slab calculation
                     decimal cumulativeAfter = cumulativeBeforeItems + runningBasic + subTotal;
 
-                    // lookup slab percent for this item/service type using cumulativeAfter
+                    // lookup slab percent from mapping
                     decimal slabPercent = db.ServiceTypeSlabMaps
                         .Where(m =>
                             m.ServiceTypeID == item.ServiceTypeID &&
@@ -72,7 +60,7 @@ namespace SOEEApp.Helpers
                     item.ServiceChargePercent = slabPercent;
                 }
 
-                // apply the stored percentage (either pre-existing or newly set above)
+                // apply stored or recalculated percentage
                 decimal pct = item.ServiceChargePercent;
                 item.ServiceCharge = decimal.Round(subTotal * (pct / 100m), 2);
 
@@ -81,22 +69,22 @@ namespace SOEEApp.Helpers
                 item.CGST = decimal.Round(taxable * 0.09m, 2);
                 item.SGST = decimal.Round(taxable * 0.09m, 2);
 
-                // total for item
+                // total for this item
                 item.Total = decimal.Round(subTotal + item.ServiceCharge + item.CGST + item.SGST, 2);
 
-                // advance runningBasic
+                // update runningBasic
                 runningBasic += subTotal;
             }
 
-            // Totals (sum of mutated item fields)
+            // totals for the SOEE
+            result.Basic = activeItems.Sum(i => i.SubTotal);
             result.ServiceCharge = activeItems.Sum(i => i.ServiceCharge);
             result.CGST = activeItems.Sum(i => i.CGST);
             result.SGST = activeItems.Sum(i => i.SGST);
             result.Total = activeItems.Sum(i => i.Total);
-            // Basic recomputed from saved SubTotal as robust approach
-            result.Basic = activeItems.Sum(i => i.SubTotal);
 
             return result;
         }
+
     }
 }

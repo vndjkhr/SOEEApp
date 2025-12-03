@@ -78,3 +78,4 @@ C:\Users\vinod_jakhar\Documents\Visual Studio 2015\Projects\SOEEApp\SOEEApp\obj\
 C:\Users\vinod_jakhar\Documents\Visual Studio 2015\Projects\SOEEApp\SOEEApp\obj\Debug\SOEEApp.csproj.GenerateResource.Cache
 C:\Users\vinod_jakhar\Documents\Visual Studio 2015\Projects\SOEEApp\SOEEApp\obj\Debug\SOEEApp.dll
 C:\Users\vinod_jakhar\Documents\Visual Studio 2015\Projects\SOEEApp\SOEEApp\obj\Debug\SOEEApp.pdb
+C:\Users\vinod_jakhar\Documents\Visual Studio 2015\Projects\SOEEApp\SOEEApp\obj\Debug\SOEEApp.csprojResolveAssemblyReference.cache
