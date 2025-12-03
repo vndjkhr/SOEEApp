@@ -1,6 +1,8 @@
 # Visual Studio build output
 bin/
 obj/
+SOEEApp/bin/
+SOEEApp/obj/
 
 # User-specific files
 *.user

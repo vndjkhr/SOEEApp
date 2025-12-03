@@ -99,7 +99,7 @@ namespace SOEEApp.Controllers
                     SGST = 0m,
                     Total = i.SubTotal + i.ServiceCharge + i.CGST + i.SGST,
 
-                IsDeleted = false
+                    IsDeleted = false
                 });
             }
 
@@ -225,6 +225,14 @@ namespace SOEEApp.Controllers
                     var existing = soee.Items.FirstOrDefault(x => x.SOEEItemID == i.SOEEItemID);
                     if (existing != null)
                     {
+                        if (i.IsDeleted)
+                        {
+                            // keep it soft-deleted
+                            existing.IsDeleted = true;
+                            continue; // skip rest
+                        }
+
+                        // update existing item
                         existing.DescriptionOfWork = i.DescriptionOfWork;
                         existing.ServiceTypeID = i.ServiceTypeID;
                         existing.Unit = i.Unit;
@@ -235,13 +243,10 @@ namespace SOEEApp.Controllers
 
                         // MUST RECALCULATE
                         existing.SubTotal = existing.Quantity * existing.Unit * existing.UnitPrice;
-
                         existing.ServiceCharge = (existing.SubTotal * existing.ServiceChargePercent) / 100;
-
                         var taxable = existing.SubTotal + existing.ServiceCharge;
                         existing.CGST = taxable * 0.09m;
                         existing.SGST = taxable * 0.09m;
-
                         existing.Total = existing.SubTotal + existing.ServiceCharge + existing.CGST + existing.SGST;
 
                         existing.IsDeleted = false;
@@ -249,7 +254,9 @@ namespace SOEEApp.Controllers
                 }
                 else
                 {
-                    // new item -> add and mark for calculation
+                    // new item
+                    if (i.IsDeleted) continue; // skip deleted new rows
+
                     var subTotal = i.Quantity * i.Unit * i.UnitPrice;
                     var serviceCharge = (subTotal * i.ServiceChargePercent) / 100;
                     var taxable = subTotal + serviceCharge;
@@ -277,6 +284,7 @@ namespace SOEEApp.Controllers
                     });
                 }
             }
+
 
             // Now compute totals and update item fields (ServiceChargePercent for new/changed items)
             var activeItems = soee.Items.Where(x => !x.IsDeleted).ToList();
