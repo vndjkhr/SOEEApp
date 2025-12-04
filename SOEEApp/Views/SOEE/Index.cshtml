@@ -15,22 +15,24 @@
             <th>Customer</th>
             <th>SOEE Date</th>
             <th>Total</th>
+            <th>Status</th>
             <th>Actions</th>
         </tr>
     </thead>
 
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var i in Model)
         {
             <tr>
-                <td>@item.SOEEID</td>
-                <td>@item.Project.Name</td>
-                <td>@item.Customer.CustomerName</td>
-                <td>@item.SOEERaiseDate.ToShortDateString()</td>
-                <td>@item.GrandTotal.ToString("0.00")</td>
+                <td>@i.SOEEID</td>
+                <td>@i.Project.Name</td>
+                <td>@i.Customer.CustomerName</td>
+                <td>@i.SOEERaiseDate.ToShortDateString()</td>
+                <td>@i.GrandTotal.ToString("0.00")</td>
+                <td>@i.Status</td>
                 <td>
-                    @Html.ActionLink("View", "Details", new { id = item.SOEEID })
-                    @Html.ActionLink("Edit", "Edit", new { id = item.SOEEID }, new { @class = "btn btn-primary btn-sm" })
+                    @Html.ActionLink("View", "Details", new { id = i.SOEEID })
+                    @Html.ActionLink("Edit", "Edit", new { id = i.SOEEID }, new { @class = "btn btn-primary btn-sm" })
                 </td>
             </tr>
         }

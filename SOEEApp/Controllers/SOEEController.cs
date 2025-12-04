@@ -20,7 +20,7 @@ namespace SOEEApp.Controllers
                          .Include(s => s.Project)
                          .Include(s => s.Customer)
                          .Where(s => projectId == 0 || s.ProjectID == projectId)
-                         .OrderByDescending(s => s.SOEERaiseDate)
+                         .OrderByDescending(s => s.SOEEID)
                          .ToList();
 
             return View(list);
@@ -142,11 +142,12 @@ namespace SOEEApp.Controllers
                 Subject = soee.Subject,
                 Reference = soee.Reference,
                 Content = soee.Content,
+                Status = soee.Status,
 
-                // -------------------------------
-                // LOAD ONLY ACTIVE ITEMS
-                // -------------------------------
-                Items = soee.Items
+            // -------------------------------
+            // LOAD ONLY ACTIVE ITEMS
+            // -------------------------------
+            Items = soee.Items
                     .Where(it => !it.IsDeleted)
                     .Select(it => new SOEEItemViewModel
                     {
@@ -211,6 +212,7 @@ namespace SOEEApp.Controllers
             soee.Subject = vm.Subject;
             soee.Content = vm.Content;
             soee.Reference = vm.Reference;
+            soee.Status = vm.Status;
 
             // soft-delete all existing by default (we will restore/update those present in vm.Items)
             foreach (var old in soee.Items)
@@ -326,6 +328,7 @@ namespace SOEEApp.Controllers
                 TotalServiceCharge = soee.TotalServiceCharge,
                 TotalTaxAmount = soee.TotalTaxAmount,
                 GrandTotal = soee.GrandTotal,
+                Status = soee.Status,
                 Project = soee.Project,
                 Customer = soee.Customer,
                 Items = soee.Items

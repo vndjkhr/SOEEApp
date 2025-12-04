@@ -58,7 +58,7 @@ namespace SOEEApp.Models.ViewModels
         public decimal TotalServiceCharge { get; set; }
         public decimal TotalTaxAmount { get; set; }
         public decimal GrandTotal { get; set; }
-
+        public SOEEStatus Status { get; set; }
         public int? PrevSOEEID { get; set; }
         public decimal PreviousSOEEBalance { get; set; }
 
