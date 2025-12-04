@@ -73,7 +73,7 @@
             @Html.TextBoxFor(m => m.Content, new { @class = "form-control" })
         </div>
 
-        <div class="form-group">
+        <div class="col-md-4">
             @Html.LabelFor(m => m.Status)
             @Html.EnumDropDownListFor(m => m.Status, new { @class = "form-control" })
         </div>
@@ -319,6 +319,25 @@
     $(document).ready(function () {
         $("#serviceBody tr").each(function () {
             calculateRow($(this));
+        });
+    });
+
+    $("#projectSelect").change(function () {
+        var pid = $(this).val();
+
+        $.getJSON("/SOEE/GetServicesForProject", { projectId: pid }, function (data) {
+
+            $(".serviceTypeDropdown").each(function () {
+                var ddl = $(this);
+                ddl.empty();
+
+                $.each(data, function (i, item) {
+                    ddl.append($('<option/>', {
+                        value: item.ServiceTypeID,
+                        text: item.ServiceName
+                    }));
+                });
+            });
         });
     });
 

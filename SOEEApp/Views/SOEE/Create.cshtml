@@ -71,7 +71,7 @@
             @Html.TextBoxFor(m => m.Content, new { @class = "form-control" })
         </div>
 
-        <div class="form-group">
+        <div class="col-md-4">
             @Html.LabelFor(m => m.Status)
             @Html.EnumDropDownListFor(m => m.Status, new { @class = "form-control" })
         </div>
@@ -152,7 +152,7 @@
             </td>
 
             <td>
-                <select name="Items[${uid}].ServiceTypeID" class="form-control">
+                <select name="Items[${uid}].ServiceTypeID" class="form-control  serviceTypeDropdown">
                     @foreach (var s in ViewBag.ServiceTypes as List<SOEEApp.Models.ServiceType>)
                     {
                         <option value="@s.ServiceTypeID">@s.ServiceName</option>
@@ -277,6 +277,25 @@
         $("#TotalTaxAmount").val((cgst + sgst).toFixed(2));
         $("#GrandTotal").val(total.toFixed(2));
     }
+
+    $("#projectSelect").change(function () {
+        var pid = $(this).val();
+
+        $.getJSON("/SOEE/GetServicesForProject", { projectId: pid }, function (data) {
+
+            $(".serviceTypeDropdown").each(function () {
+                var ddl = $(this);
+                ddl.empty();
+
+                $.each(data, function (i, item) {
+                    ddl.append($('<option/>', {
+                        value: item.ServiceTypeID,
+                        text: item.ServiceName
+                    }));
+                });
+            });
+        });
+    });
 
     </script>
 }

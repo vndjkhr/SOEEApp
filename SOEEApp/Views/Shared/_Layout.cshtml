@@ -22,16 +22,18 @@
                 @*@Html.ActionLink("SOEE", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })*@
             </div>
             <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Create SOEE", "Create", "SOEE")</li>
-                    <li>@Html.ActionLink("List SOEE", "Index", "SOEE")</li>
-                    <li>@Html.ActionLink("Projects", "Index", "Projects")</li>
-                    <li>@Html.ActionLink("Customers", "Index", "Customers")</li>
-                    <li>@Html.ActionLink("Service Types", "Index", "ServiceTypes")</li>
-                    <li>@Html.ActionLink("Slabs", "Index", "ServiceCostSlabs")</li>
-                    <li>@Html.ActionLink("Service → Slab %", "Index", "ServiceTypeSlabMaps")</li>
-                    <li>@Html.ActionLink("Project–Service Map", "Index", "ProjectServiceMaps")</li>
-                </ul>
+                @if (User.Identity.IsAuthenticated) { }
+                    <ul class="nav navbar-nav">
+                        <li>@Html.ActionLink("Create SOEE", "Create", "SOEE")</li>
+                        <li>@Html.ActionLink("List SOEE", "Index", "SOEE")</li>
+                        <li>@Html.ActionLink("Projects", "Index", "Projects")</li>
+                        <li>@Html.ActionLink("Customers", "Index", "Customers")</li>
+                        <li>@Html.ActionLink("Service Types", "Index", "ServiceTypes")</li>
+                        <li>@Html.ActionLink("Slabs", "Index", "ServiceCostSlabs")</li>
+                        <li>@Html.ActionLink("Service → Slab %", "Index", "ServiceTypeSlabMaps")</li>
+                        <li>@Html.ActionLink("Project–Service Map", "Index", "ProjectServiceMaps")</li>
+                    </ul>
+                    }
                 @Html.Partial("_LoginPartial")
             </div>
         </div>

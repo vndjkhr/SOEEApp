@@ -59,7 +59,12 @@ namespace SOEEApp.Controllers
             {
                 ViewBag.Projects = new SelectList(db.Projects.ToList(), "ProjectID", "Name", vm.ProjectID);
                 ViewBag.Customers = new SelectList(db.Customers.ToList(), "CustomerID", "CustomerName", vm.CustomerID);
-                ViewBag.ServiceTypes = db.ServiceTypes.ToList();
+                var mappedServices = db.ProjectServiceMaps
+                    .Where(m => m.ProjectID == vm.ProjectID)
+                    .Select(m => m.ServiceType)
+                    .ToList();
+
+                ViewBag.ServiceTypes = mappedServices;
                 return View(vm);
             }
 
@@ -173,8 +178,12 @@ namespace SOEEApp.Controllers
             // Dropdowns
             ViewBag.Projects = new SelectList(db.Projects.ToList(), "ProjectID", "Name", vm.ProjectID);
             ViewBag.Customers = new SelectList(db.Customers.ToList(), "CustomerID", "CustomerName", vm.CustomerID);
-            ViewBag.ServiceTypes = db.ServiceTypes.ToList();
-
+            var mappedServices = db.ProjectServiceMaps
+                .Where(m => m.ProjectID == vm.ProjectID)
+                .Select(m => m.ServiceType)
+                .ToList();
+            ViewBag.ServiceTypes = mappedServices;
+           
             return View("Edit", vm);
         }
 
@@ -357,6 +366,20 @@ namespace SOEEApp.Controllers
             return View(vm);
         }
 
+        public JsonResult GetServicesForProject(int projectId)
+        {
+            var services = (from m in db.ProjectServiceMaps
+                            join s in db.ServiceTypes
+                            on m.ServiceTypeID equals s.ServiceTypeID
+                            where m.ProjectID == projectId
+                            select new
+                            {
+                                s.ServiceTypeID,
+                                s.ServiceName
+                            }).ToList();
+
+            return Json(services, JsonRequestBehavior.AllowGet);
+        }
 
 
         [HttpPost]
